@@ -21,10 +21,20 @@ var (
 // with the passed options.
 func resizer(buf []byte, o Options) ([]byte, error) {
 	defer C.vips_thread_shutdown()
+	var image *C.VipsImage
+	var imageType ImageType
+	var err error
 
-	image, imageType, err := loadImage(buf)
-	if err != nil {
-		return nil, err
+	if o.Scale != 0 {
+		image, imageType, err = loadPDF(buf, o.Scale)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		image, imageType, err = loadImage(buf)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// Clone and define default options
@@ -151,6 +161,19 @@ func loadImage(buf []byte) (*C.VipsImage, ImageType, error) {
 	}
 
 	image, imageType, err := vipsRead(buf)
+	if err != nil {
+		return nil, JPEG, err
+	}
+
+	return image, imageType, nil
+}
+
+func loadPDF(buf []byte, scale float64) (*C.VipsImage, ImageType, error) {
+	if len(buf) == 0 {
+		return nil, JPEG, errors.New("Image buffer is empty")
+	}
+
+	image, imageType, err := vipsReadPDF(buf, scale)
 	if err != nil {
 		return nil, JPEG, err
 	}

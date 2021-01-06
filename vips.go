@@ -370,6 +370,25 @@ func vipsRead(buf []byte) (*C.VipsImage, ImageType, error) {
 	return image, imageType, nil
 }
 
+func vipsReadPDF(buf []byte, scale float64) (*C.VipsImage, ImageType, error) {
+	var image *C.VipsImage
+	imageType := vipsImageType(buf)
+
+	if imageType == UNKNOWN {
+		return nil, UNKNOWN, errors.New("Unsupported image format")
+	}
+
+	length := C.size_t(len(buf))
+	imageBuf := unsafe.Pointer(&buf[0])
+
+	err := C.vips_init_image_from_pdf(imageBuf, length, C.int(imageType), &image, C.double(scale))
+	if err != 0 {
+		return nil, UNKNOWN, catchVipsError()
+	}
+
+	return image, imageType, nil
+}
+
 func vipsColourspaceIsSupportedBuffer(buf []byte) (bool, error) {
 	image, _, err := vipsRead(buf)
 	if err != nil {

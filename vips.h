@@ -430,6 +430,11 @@ vips_flatten_background_brigde(VipsImage *in, VipsImage **out, double r, double 
 }
 
 int
+vips_init_image_from_pdf (void *buf, size_t len, int imageType, VipsImage **out, double scale) {
+	return vips_pdfload_buffer(buf, len, out, "access", VIPS_ACCESS_RANDOM, "scale", scale, NULL);
+}
+
+int
 vips_init_image (void *buf, size_t len, int imageType, VipsImage **out) {
 	int code = 1;
 

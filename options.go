@@ -227,8 +227,9 @@ type Options struct {
 	InputICC       string
 	Palette        bool
 	// Speed defines the AVIF encoders CPU effort. Valid values are 0-8.
-	Speed          int
+	Speed int
 
 	// private fields
 	autoRotateOnly bool
+	Scale          float64
 }

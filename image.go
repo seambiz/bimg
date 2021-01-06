@@ -20,6 +20,17 @@ func (i *Image) Resize(width, height int) ([]byte, error) {
 	return i.Process(options)
 }
 
+// Resize resizes the image to fixed width and height.
+func (i *Image) ResizePDF(width, height int, scale float64) ([]byte, error) {
+	options := Options{
+		Width:  width,
+		Height: height,
+		Embed:  true,
+		Scale:  scale,
+	}
+	return i.Process(options)
+}
+
 // ForceResize resizes with custom size (aspect ratio won't be maintained).
 func (i *Image) ForceResize(width, height int) ([]byte, error) {
 	options := Options{
