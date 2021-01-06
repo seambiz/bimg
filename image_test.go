@@ -28,17 +28,22 @@ func TestImageGifResize(t *testing.T) {
 }
 
 func TestImagePdfResize(t *testing.T) {
-	b, err := initImage("test.pdf").Resize(300, 240)
+	_, err := initImage("test.pdf").Resize(300, 240)
 	if err == nil {
 		t.Errorf("PDF cannot be saved within VIPS")
 	}
-	t.Errorf("size: %d", len(b))
 }
 
 func TestImagePdfResizeWithScale(t *testing.T) {
-	b, err := initImage("test.pdf").ResizePDF(300, 240, 2)
-	if err == nil {
-		t.Errorf("PDF cannot be saved within VIPS")
+	b, err := initImage("test.pdf").ResizePDF(300, 240, 1)
+	if err != nil {
+		t.Errorf("PDF to PNG error")
+	}
+	t.Errorf("size: %d", len(b))
+
+	b, err = initImage("test.pdf").ResizePDF(300, 240, 2)
+	if err != nil {
+		t.Errorf("PDF to PNG error")
 	}
 	t.Errorf("size: %d", len(b))
 }

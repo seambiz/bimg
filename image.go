@@ -27,6 +27,7 @@ func (i *Image) ResizePDF(width, height int, scale float64) ([]byte, error) {
 		Height: height,
 		Embed:  true,
 		Scale:  scale,
+		Type:   PNG,
 	}
 	return i.Process(options)
 }
